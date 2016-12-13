@@ -22,11 +22,7 @@ public class DetailActivityFragment extends Fragment {
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
 
-    private final String TITLE_INTENT_KEY = "title";
-    private final String THUMBNAIL_INTENT_KEY = "thumbnail";
-    private final String OVERVIEW_INTENT_KEY = "overview";
-    private final String USER_RATING_INTENT_KEY = "user_rating";
-    private final String RELEASE_DATE_INTENT_KEY = "release_date";
+    private final String MOVIE_INTENT_KEY = "movie";
 
     public DetailActivityFragment() {
     }
@@ -46,29 +42,34 @@ public class DetailActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent != null) {
 
-            TextView title = (TextView) rootView.findViewById(R.id.title);
-            title.setText(intent.getStringExtra(TITLE_INTENT_KEY));
+            Movie movie = (Movie) intent.getParcelableExtra(MOVIE_INTENT_KEY);
 
-            final String BASE_URL = "http://image.tmdb.org/t/p/w185";
-            Uri buildUri = Uri.parse(BASE_URL).buildUpon()
-                    .appendEncodedPath(intent.getStringExtra(THUMBNAIL_INTENT_KEY))
-                    .build();
-            String movieUrl = buildUri.toString();
+            if (movie != null) {
 
-            ImageView imageView = (ImageView) rootView.findViewById(R.id.thumbnail);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setAdjustViewBounds(true);
+                TextView title = (TextView) rootView.findViewById(R.id.title);
+                title.setText(movie.getTitle());
 
-            Picasso.with(getActivity()).load(movieUrl).into(imageView);
+                final String BASE_URL = "http://image.tmdb.org/t/p/w185";
+                Uri buildUri = Uri.parse(BASE_URL).buildUpon()
+                        .appendEncodedPath(movie.getThumbnail())
+                        .build();
+                String movieUrl = buildUri.toString();
 
-            TextView overview = (TextView) rootView.findViewById(R.id.overview);
-            overview.setText(intent.getStringExtra(OVERVIEW_INTENT_KEY));
+                ImageView imageView = (ImageView) rootView.findViewById(R.id.thumbnail);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setAdjustViewBounds(true);
 
-            TextView userRating = (TextView) rootView.findViewById(R.id.user_rating);
-            userRating.setText("User Rating: " + String.valueOf(intent.getDoubleExtra(USER_RATING_INTENT_KEY, 0)) + " / 10.0");
+                Picasso.with(getActivity()).load(movieUrl).into(imageView);
 
-            TextView releaseDate = (TextView) rootView.findViewById(R.id.release_date);
-            releaseDate.setText("Release Date: " + intent.getStringExtra(RELEASE_DATE_INTENT_KEY));
+                TextView overview = (TextView) rootView.findViewById(R.id.overview);
+                overview.setText(movie.getSynopsis());
+
+                TextView userRating = (TextView) rootView.findViewById(R.id.user_rating);
+                userRating.setText("User Rating: " + String.valueOf(movie.getUserRating()) + " / 10.0");
+
+                TextView releaseDate = (TextView) rootView.findViewById(R.id.release_date);
+                releaseDate.setText("Release Date: " + movie.getReleaseDate());
+            }
         }
 
 

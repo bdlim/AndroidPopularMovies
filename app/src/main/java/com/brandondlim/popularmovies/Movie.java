@@ -1,6 +1,9 @@
 package com.brandondlim.popularmovies;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable {
     private String mTitle;
     private String mThumbnail;
     private String mSynopsis;
@@ -17,6 +20,42 @@ public class Movie {
         mReleaseDate = releaseDate;
         mId = id;
     }
+
+    public Movie(Parcel in) {
+        mTitle = in.readString();
+        mThumbnail = in.readString();
+        mSynopsis = in.readString();
+        mUserRating = in.readDouble();
+        mReleaseDate = in.readString();
+        mId = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int f) {
+        dest.writeString(mTitle);
+        dest.writeString(mThumbnail);
+        dest.writeString(mSynopsis);
+        dest.writeDouble(mUserRating);
+        dest.writeString(mReleaseDate);
+        dest.writeInt(mId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    static final Creator CREATOR = new Creator() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[0];
+        }
+    };
 
     public String getTitle() {
         return mTitle;
