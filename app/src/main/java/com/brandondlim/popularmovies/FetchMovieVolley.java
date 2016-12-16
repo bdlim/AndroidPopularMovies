@@ -3,6 +3,7 @@ package com.brandondlim.popularmovies;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -70,6 +71,12 @@ public class FetchMovieVolley {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e(LOG_TAG, error.getMessage());
+
+                        CharSequence text = "Something went wrong. Please check your " +
+                                "internet connection and try again!";
+                        Toast toast = Toast.makeText(mContext, text, Toast.LENGTH_SHORT);
+                        toast.show();
+
                 }
         });
 

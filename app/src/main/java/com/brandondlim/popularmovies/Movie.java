@@ -45,7 +45,7 @@ public class Movie implements Parcelable {
         return 0;
     }
 
-    static final Creator CREATOR = new Creator() {
+    public static final Creator CREATOR = new Creator() {
         @Override
         public Movie createFromParcel(Parcel source) {
             return new Movie(source);
