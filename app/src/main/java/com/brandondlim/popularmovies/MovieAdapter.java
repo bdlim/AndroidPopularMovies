@@ -3,6 +3,7 @@ package com.brandondlim.popularmovies;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,6 +58,7 @@ public class MovieAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Movie movie = mMovies.get(position);
+        ViewHolder viewHolder;
 
         final String BASE_URL = "http://image.tmdb.org/t/p/w185";
 
@@ -68,13 +70,25 @@ public class MovieAdapter extends BaseAdapter {
 
         Log.d(LOG_TAG, "Movie URL: " + movieUrl);
 
-        ImageView imageView = new ImageView(mContext);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageView.setAdjustViewBounds(true);
+        if (convertView == null) {
+            final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            convertView = layoutInflater.inflate(R.layout.movie_grid, null);
 
-        Picasso.with(mContext).load(movieUrl).into(imageView);
+            viewHolder = new ViewHolder();
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.movie_grid_image);
 
-        return imageView;
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        Picasso.with(mContext).load(movieUrl).into(viewHolder.imageView);
+
+        return convertView;
+    }
+
+    static class ViewHolder {
+        ImageView imageView;
     }
 
 }
